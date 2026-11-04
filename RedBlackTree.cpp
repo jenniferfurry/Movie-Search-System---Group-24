@@ -1,7 +1,7 @@
 #include "RedBlackTree.h"
 using namespace std;
 
-RedBlackTree::~RedBlackTree() {  //Destructor deletes all nodes when the tree destroyed
+RedBlackTree::~RedBlackTree() {  //Destructor deletes all nodes when tree is destroyed
     clear(root);
 }
 
@@ -88,4 +88,87 @@ void RedBlackTree::rotateRight(Node* node) {
 
     leftChild->right = node;        //put original node on the right
     node->parent = leftChild;
+}
+
+void RedBlackTree::insert(const Movie& movie) {    //inserts a movie by title
+    Node* newNode = new Node;    //creates a new node and stores the movie
+    newNode->movie = movie;
+
+    if (root == nullptr) {       //first node becomes black root
+        root = newNode;
+        root->isRed = false;
+        return;
+    }
+
+    Node* current = root;
+    Node* parent = nullptr;
+
+    while (current != nullptr) {    //move through tree until empty position found
+        parent = current;
+
+        if (movie.title < current->movie.title) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+
+    newNode->parent = parent;        //connect new node to last node visited
+
+    if (movie.title < parent->movie.title) {    //place new node on the correct side of parent
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
+    }
+
+    balance(newNode);                //balance red-black-tree
+}
+
+void RedBlackTree::balance(Node* node) {    //balance red-black-tree
+    if (node->parent == nullptr) {    // If node is root, make it black
+        node->isRed = false;
+        return;
+    }
+
+    if (!node->parent->isRed) {        // No balancing is needed if parent is black
+        return;
+    }
+
+    Node* parent = node->parent;        //Intialize parent, grandparent, and uncle
+    Node* grandparent = parent->parent;
+    Node* uncle = nullptr;
+
+    if (parent == grandparent->left) {    //find uncle
+        uncle = grandparent->right;
+    } else {
+        uncle = grandparent->left;
+    }
+
+    if (uncle != nullptr && uncle->isRed) {    //if uncle red, flip colors and check grandparent
+        parent->isRed = false;
+        uncle->isRed = false;
+        grandparent->isRed = true;
+
+        balance(grandparent);
+        return;
+    }
+
+    if (node == parent->right && parent == grandparent->left) {    //fix left-right case
+        rotateLeft(parent);
+        node = parent;
+        parent = node->parent;
+    } else if (node == parent->left && parent == grandparent->right) {    //fix right-left case
+        rotateRight(parent);
+        node = parent;
+        parent = node->parent;
+    }
+
+    parent->isRed = false;        //change colors before final rotation
+    grandparent->isRed = true;
+
+    if (node == parent->left) {    //rotate grandparent in correct direction for left-left or right-right cases
+        rotateRight(grandparent);
+    } else {
+        rotateLeft(grandparent);
+    }
 }
