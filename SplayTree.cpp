@@ -127,14 +127,14 @@ void SplayTree::splay(Node* node) {
 }
 
 // FIND NODE FUNCTION
-SplayTree::Node* SplayTree::findNode(int id) {
+SplayTree::Node* SplayTree::findNode(const std::string& title) {
     Node* current = root;
     while (current != nullptr) {
-        if (id < current->movie.id) { // if id is smaller than current node's id, go left
+        if (title < current->movie.title) { // if title is smaller than current node's title, go left
             current = current->left;
-        } else if (id > current->movie.id) { // if id is larger than current node's id, go right
+        } else if (title > current->movie.title) { // if title is larger than current node's title, go right
             current = current->right;
-        } else { // if id matches current node's id, return the node
+        } else { // if title matches current node's title, return the node
             return current; // node found
         }
     }
@@ -166,7 +166,7 @@ void SplayTree::insert(const Movie& movie) {
     }
 
     newNode->parent = parent; // set the parent of the new node
-    if (movie.id < parent->movie.id) {
+    if (comesBefore(movie, parent->movie)) {
         parent->left = newNode; // insert as left child
     } else {
         parent->right = newNode; // insert as right child
@@ -177,8 +177,8 @@ void SplayTree::insert(const Movie& movie) {
 }
 
 // SEARCH FUNCTION
-Movie* SplayTree::search(int id) {
-    Node* node = findNode(id); // find the node with the given id
+Movie* SplayTree::search(const std::string& title) {
+    Node* node = findNode(title); // find the node with the given title
     if (node != nullptr) { // if node is found, splay it to the root
         splay(node); // splay the found node to the root
         return &(node->movie); // return pointer to the movie record
@@ -187,8 +187,8 @@ Movie* SplayTree::search(int id) {
 }
 
 // REMOVE FUNCTION
-bool SplayTree::remove(int id) {
-    Node* node = findNode(id);
+bool SplayTree::remove(const std::string& title) {
+    Node* node = findNode(title);
     if (node == nullptr) {
         return false; // node not found
     }
@@ -198,12 +198,12 @@ bool SplayTree::remove(int id) {
     Node* leftSubtree = node->left; // store left subtree
     Node* rightSubtree = node->right; // store right subtree
 
-    // Remove the node (simplified - actual implementation may vary)
-    if (leftSubtree == nullptr) {
-        leftSubtree->parent = nullptr; // update parent of left subtree to null
+    // Detach both subtrees from the node being removed
+    if (leftSubtree != nullptr) {
+        leftSubtree->parent = nullptr; // left subtree is now its own tree
     }
-    if (rightSubtree == nullptr) {
-        rightSubtree->parent = nullptr; // update parent of right subtree to null
+    if (rightSubtree != nullptr) {
+        rightSubtree->parent = nullptr; // right subtree is now its own tree
     }
 
     delete node; // delete the node
@@ -211,7 +211,7 @@ bool SplayTree::remove(int id) {
     if (leftSubtree == nullptr) {
         root = rightSubtree; // set right subtree as new root
     } else {
-        root = leftSubtree; // set left subtree as new root if left is null
+        root = leftSubtree; // left subtree becomes the tree; its max is splayed up next
         Node* maxNode = root;
 
         while (maxNode->right != nullptr) { // find the maximum node in the left subtree

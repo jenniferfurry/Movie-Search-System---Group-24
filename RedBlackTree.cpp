@@ -17,7 +17,7 @@ void RedBlackTree::insert(const Movie& movie) {    //inserts a movie by title
     while (current != nullptr) {    //move through tree until empty position found
         parent = current;
 
-        if (movie.title < current->movie.title) {
+        if (comesBefore(movie, current->movie)) { // places new node on correct side of parent
             current = current->left;
         } else {
             current = current->right;

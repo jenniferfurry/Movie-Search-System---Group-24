@@ -26,7 +26,7 @@ class SplayTree {
         void splay(Node* node);
 
         // SEARCH HELPER
-        Node* findNode(int id);
+        Node* findNode(const std::string& title);
 
         // DELETION FUNCTION
         void destroyTree(Node* node);
@@ -40,9 +40,9 @@ class SplayTree {
         ~SplayTree(); // deallocates memory when deleteing
 
         // REST OF TREE FUNCTIONS
-        void insert(const Movie& movie); // inserts a new movie into tree with ID as key
-        Movie* search(int id); // searches for movie by ID and returns pointer to its
-        bool remove(int id); // removes move by ID -> returns true if removed and false if not found
+        void insert(const Movie& movie); // inserts a new movie into tree with title as key
+        Movie* search(const std::string& title); // searches for movie by title and returns most popular
+        bool remove(const std::string& title); // removes movie by title -> returns true if removed and false if not found
         int size() const; // gets number of movies currently in tree
         void clear(); // removes all movies from tree so it is empty
 };
