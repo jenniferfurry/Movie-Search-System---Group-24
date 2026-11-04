@@ -1,6 +1,6 @@
 #pragma once
 #include "Movie.h"
-#include<string>
+#include <string>
 using namespace std;
 
 class RedBlackTree {
@@ -16,7 +16,7 @@ class RedBlackTree {
     Node* root = nullptr;
   
     void rotateLeft(Node* n);
-    void rotateRight(Node* n );
+    void rotateRight(Node* n);
     void balance(Node* n);
     void clear(Node* n);
 
@@ -25,8 +25,5 @@ class RedBlackTree {
 
     void insert(const Movie& m);
     Movie* search(const string& title);
-    
-  
-
-
       
+};
