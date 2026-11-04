@@ -7,7 +7,7 @@ class RedBlackTree {
   private:
     struct Node {
       Movie movie;
-      bool isRed = true;
+      bool isRed = true;    //true means red, false means black
       Node* left = nullptr;
       Node* right = nullptr;
       Node* parent = nullptr;
