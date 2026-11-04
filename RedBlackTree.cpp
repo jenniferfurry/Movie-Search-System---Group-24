@@ -1,18 +1,38 @@
 #include "RedBlackTree.h"
 using namespace std;
 
-RedBlackTree::~RedBlackTree() {  //Destructor deletes all nodes when tree is destroyed
-    clear(root);
-}
+void RedBlackTree::insert(const Movie& movie) {    //inserts a movie by title
+    Node* newNode = new Node;    //creates a new node and stores the movie
+    newNode->movie = movie;
 
-void RedBlackTree::clear(Node* node) {  //Deletes children before deleting the parent
-    if (node == nullptr) {
+    if (root == nullptr) {       //first node becomes black root
+        root = newNode;
+        root->isRed = false;
         return;
     }
 
-    clear(node->left);
-    clear(node->right);
-    delete node;
+    Node* current = root;
+    Node* parent = nullptr;
+
+    while (current != nullptr) {    //move through tree until empty position found
+        parent = current;
+
+        if (movie.title < current->movie.title) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+
+    newNode->parent = parent;        //connect new node to last node visited
+
+    if (movie.title < parent->movie.title) {    //place new node on the correct side of parent
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
+    }
+
+    balance(newNode);                //balance red-black-tree
 }
 
 Movie* RedBlackTree::search(const string& title) {  //searches for a movie using its exact title
@@ -30,7 +50,6 @@ Movie* RedBlackTree::search(const string& title) {  //searches for a movie using
 
     return nullptr;     //title was not found
 }
-
 
 void RedBlackTree::rotateLeft(Node* node) {
     if (node == nullptr) {           //check for node and right child
@@ -90,39 +109,6 @@ void RedBlackTree::rotateRight(Node* node) {
     node->parent = leftChild;
 }
 
-void RedBlackTree::insert(const Movie& movie) {    //inserts a movie by title
-    Node* newNode = new Node;    //creates a new node and stores the movie
-    newNode->movie = movie;
-
-    if (root == nullptr) {       //first node becomes black root
-        root = newNode;
-        root->isRed = false;
-        return;
-    }
-
-    Node* current = root;
-    Node* parent = nullptr;
-
-    while (current != nullptr) {    //move through tree until empty position found
-        parent = current;
-
-        if (movie.title < current->movie.title) {
-            current = current->left;
-        } else {
-            current = current->right;
-        }
-    }
-
-    newNode->parent = parent;        //connect new node to last node visited
-
-    if (movie.title < parent->movie.title) {    //place new node on the correct side of parent
-        parent->left = newNode;
-    } else {
-        parent->right = newNode;
-    }
-
-    balance(newNode);                //balance red-black-tree
-}
 
 void RedBlackTree::balance(Node* node) {    //balance red-black-tree
     if (node->parent == nullptr) {    // If node is root, make it black
@@ -171,4 +157,18 @@ void RedBlackTree::balance(Node* node) {    //balance red-black-tree
     } else {
         rotateLeft(grandparent);
     }
+}
+
+void RedBlackTree::clear(Node* node) {  //Deletes children before deleting the parent
+    if (node == nullptr) {
+        return;
+    }
+
+    clear(node->left);
+    clear(node->right);
+    delete node;
+}
+
+RedBlackTree::~RedBlackTree() {  //Destructor deletes all nodes when tree is destroyed
+    clear(root);
 }
