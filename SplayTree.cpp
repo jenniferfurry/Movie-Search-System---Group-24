@@ -1,4 +1,5 @@
 #include "SplayTree.h"
+#include "Movie.h"
 
 
 // NODE CONSTRUCTOR
