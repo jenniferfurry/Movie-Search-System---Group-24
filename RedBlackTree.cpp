@@ -26,7 +26,7 @@ void RedBlackTree::insert(const Movie& movie) {    //inserts a movie by title
 
     newNode->parent = parent;        //connect new node to last node visited
 
-    if (movie.title < parent->movie.title) {    //place new node on the correct side of parent
+    if (comesBefore(movie, parent->movie)) {    //place new node on the correct side of parent
         parent->left = newNode;
     } else {
         parent->right = newNode;
@@ -37,6 +37,7 @@ void RedBlackTree::insert(const Movie& movie) {    //inserts a movie by title
 
 Movie* RedBlackTree::search(const string& title) {  //searches for a movie using its exact title
     Node* current = root;       //start search at root
+    Node* match = nullptr; // highest popularity match found so far
 
     while (current != nullptr) {     //continue moving left or right until title found
         if (title < current->movie.title) {
@@ -44,11 +45,12 @@ Movie* RedBlackTree::search(const string& title) {  //searches for a movie using
         } else if (title > current->movie.title) {
             current = current->right;
         } else {
-            return &current->movie;
+            match = current;            //title matches; a more popular copy can only be to the left
+            current = current->left;
         }
     }
 
-    return nullptr;     //title was not found
+    return match ? &match->movie : nullptr;     //nullptr if title was not found
 }
 
 void RedBlackTree::rotateLeft(Node* node) {

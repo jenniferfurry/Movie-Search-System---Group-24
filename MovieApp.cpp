@@ -183,7 +183,7 @@ void MovieApp::drawHeader(const char* pageName) {
     ImGui::SameLine(ImGui::GetWindowWidth() - boxWidth - ImGui::GetStyle().WindowPadding.x);
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 6.0f);
     ImGui::SetNextItemWidth(boxWidth);
-    if (ImGui::InputTextWithHint("##headerSearch", "search a title, press Enter", headerSearch,
+    if (ImGui::InputTextWithHint("##headerSearch", "Search Title", headerSearch,
                                  sizeof(headerSearch), ImGuiInputTextFlags_EnterReturnsTrue)) {
         // jump to the search page and run the search there
         std::strncpy(searchTitle, headerSearch, sizeof(searchTitle) - 1);
@@ -244,7 +244,7 @@ void MovieApp::drawSearch() {
     ImGui::Text("Movie Title:");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(360);
-    bool enter = ImGui::InputTextWithHint("##searchTitle", "exact title, e.g. Interstellar", searchTitle,
+    bool enter = ImGui::InputTextWithHint("##searchTitle", "Search Title", searchTitle,
                                           sizeof(searchTitle), ImGuiInputTextFlags_EnterReturnsTrue);
 
     ImGui::Spacing();
@@ -285,7 +285,7 @@ void MovieApp::drawCompare() {
     ImGui::Text("Movie Title:");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(360);
-    bool enter = ImGui::InputTextWithHint("##compareTitle", "exact title, e.g. Interstellar", compareTitle,
+    bool enter = ImGui::InputTextWithHint("##compareTitle", "Search Title", compareTitle,
                                           sizeof(compareTitle), ImGuiInputTextFlags_EnterReturnsTrue);
     ImGui::SameLine();
     if (ImGui::Button("Run Test") || enter) runCompare();

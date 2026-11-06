@@ -11,7 +11,7 @@
 #define MOVIE_SEARCH_SYSTEM_GROUP_24_MOVIEDATA_H
 
 
-std::vector<Movie> loadMovies(const std::string& fileName, int duplicatesSkipped);
+std::vector<Movie> loadMovies(const std::string& fileName, int& duplicatesSkipped);
 
 
 #endif //MOVIE_SEARCH_SYSTEM_GROUP_24_MOVIEDATA_H

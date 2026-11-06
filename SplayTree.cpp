@@ -130,16 +130,18 @@ void SplayTree::splay(Node* node) {
 // FIND NODE FUNCTION
 SplayTree::Node* SplayTree::findNode(const std::string& title) {
     Node* current = root;
+    Node* match = nullptr; // highest popularity match found so far
     while (current != nullptr) {
         if (title < current->movie.title) { // if title is smaller than current node's title, go left
             current = current->left;
         } else if (title > current->movie.title) { // if title is larger than current node's title, go right
             current = current->right;
         } else { // if title matches current node's title, return the node
-            return current; // node found
+            match = current;
+            current = current->left; // node found
         }
     }
-    return nullptr; // node not found
+    return match; // node not found
 }
 
 // INSERT FUNCTION
@@ -156,9 +158,9 @@ void SplayTree::insert(const Movie& movie) {
 
     while (current != nullptr) { // traverse the tree to find the correct position for the new node
         parent = current;
-        if (movie.id < current->movie.id) {
+        if (comesBefore(movie, current->movie)) {
             current = current->left; // go left if new movie's id is smaller
-        } else if (movie.id > current->movie.id) {
+        } else if (comesBefore(current->movie, movie)) {
             current = current->right; // go right if new movie's id is larger
         } else {
             delete newNode; // duplicate id found, do not insert

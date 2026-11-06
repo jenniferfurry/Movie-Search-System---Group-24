@@ -106,7 +106,7 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glslVersion);
 
-    app.load(findDataFile()); // builds both trees (takes about a second)
+    app.load(findDataFile()); // builds both trees
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
